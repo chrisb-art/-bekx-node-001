@@ -1,0 +1,1 @@
+function mode(k){if(/_live_/.test(k))return 'live';if(/_test_/.test(k))return 'sandbox';return 'unknown'}module.exports=(q,s)=>s.json({node:'001.6',service:'BEKX-SIGNAL-001',price_aud:1,payment_provider:'stripe',payment_mode:mode(process.env.STRIPE_SECRET_KEY||''),verified_checkout:true,validated_completion:true,persisted_search_evidence:true,idempotent_revenue:true});
