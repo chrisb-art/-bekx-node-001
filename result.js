@@ -1,1 +1,0 @@
-const {publicCall}=require('./_supabase');module.exports=async(q,s)=>{try{let x=await publicCall('rpc/get_signal_result',{method:'POST',body:JSON.stringify({p_token:String(q.query.token||'')})});if(!x?.[0])return s.status(404).json({error:'not_found'});s.json(x[0])}catch{s.status(500).json({error:'result_unavailable'})}};
