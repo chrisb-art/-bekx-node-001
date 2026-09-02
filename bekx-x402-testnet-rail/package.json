@@ -1,0 +1,12 @@
+{
+  "name": "bekx-node-001",
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@x402/core": "^2.11.0",
+    "@x402/evm": "^2.11.0",
+    "@x402/express": "^2.11.0"
+  }
+}
