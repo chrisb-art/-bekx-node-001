@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>BEKX x402 Test</title>
+  <style>
+    body{margin:0;background:#070707;color:#f2f0ea;font-family:ui-monospace,monospace}
+    .w{width:min(760px,calc(100% - 32px));margin:auto;padding:48px 0}
+    h1{font-size:clamp(34px,7vw,64px);margin:0 0 14px}
+    .g{color:#c8a869}.box{border:1px solid #292929;background:#101010;padding:20px;margin-top:20px}
+    button{padding:15px 22px;background:#c8a869;border:0;font-weight:800;font-size:15px}
+    pre{white-space:pre-wrap;word-break:break-word;background:#050505;border:1px solid #292929;padding:16px;min-height:160px}
+    .muted{color:#9b9891;font-family:system-ui;line-height:1.5}
+  </style>
+</head>
+<body>
+<div class="w">
+  <div class="g">BEKX NODE 001 // x402 DIAGNOSTIC</div>
+  <h1>Unpaid machine request test</h1>
+  <p class="muted">This sends a POST to the BEKX SIGNAL machine endpoint without payment. A correct x402 gate should return HTTP 402 Payment Required.</p>
+  <div class="box">
+    <button id="run">TEST x402</button>
+    <p id="status" class="muted">Not tested yet.</p>
+    <pre id="out"></pre>
+  </div>
+</div>
+<script>
+run.onclick = async () => {
+  status.textContent = 'Sending unpaid POST...';
+  out.textContent = '';
+  try {
+    const r = await fetch('/api/signal-agent', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        topic: 'BEKX x402 test',
+        question: 'Confirm that unpaid machine access is rejected with HTTP 402.'
+      })
+    });
+
+    const headers = {};
+    for (const [k,v] of r.headers.entries()) headers[k] = v;
+
+    let body;
+    const text = await r.text();
+    try { body = JSON.parse(text); } catch { body = text; }
+
+    status.textContent = `HTTP ${r.status} ${r.statusText}`;
+    out.textContent = JSON.stringify({
+      status: r.status,
+      statusText: r.statusText,
+      headers,
+      body
+    }, null, 2);
+  } catch (e) {
+    status.textContent = 'Request failed';
+    out.textContent = e.message;
+  }
+};
+</script>
+</body>
+</html>
